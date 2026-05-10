@@ -10,10 +10,10 @@ Personal use. Not packaged for distribution.
 
 ## Requirements
 
-- Ubuntu 24.04 (or any Linux with Python 3.10+ and Node.js)
-- Python 3.10 or newer
+- Ubuntu 24.04 (or any Linux)
+- [`uv`](https://docs.astral.sh/uv/) — the Python tooling. Install with `curl -LsSf https://astral.sh/uv/install.sh | sh` if you don't have it. uv handles the Python version automatically (the project pins 3.10+).
 - Node.js + npm: `sudo apt install nodejs npm`
-- pipx (for the prerequisite tool): `sudo apt install pipx`
+- `pipx` for the prerequisite tool: `sudo apt install pipx`
 - An existing Obsidian vault to import into
 
 The tool itself has zero Python runtime dependencies. Only `pytest` is needed for tests.
@@ -98,14 +98,14 @@ git clone <this repo>
 cd evernote-exporter
 ```
 
-No install step — the tool runs as `python3 -m evernote_exporter` directly from the repo. Runtime dependencies are stdlib only.
+No install step. The first `uv run` invocation builds an isolated venv (in `.venv/`) and installs the project from the local `pyproject.toml`. The runtime has zero third-party dependencies.
 
 ### 2.2 Dry run first
 
 Before doing anything destructive, validate the inputs:
 
 ```bash
-python3 -m evernote_exporter \
+uv run evernote-exporter \
   --enex-dir ~/evernote-export/evernote-backup-output \
   --vault   /path/to/your/Obsidian/Vault \
   --root-folder Evernote \
@@ -117,7 +117,7 @@ This runs all preflight checks and prints what *would* happen without touching a
 ### 2.3 Run for real
 
 ```bash
-python3 -m evernote_exporter \
+uv run evernote-exporter \
   --enex-dir ~/evernote-export/evernote-backup-output \
   --vault   /path/to/your/Obsidian/Vault \
   --root-folder Evernote
@@ -248,13 +248,13 @@ If you point at a folder that exists but has no marker (e.g., a typo, or you ren
 
 ```bash
 # Run all tests (unit + integration + E2E against real Yarle)
-pytest
+uv run --extra dev pytest
 
 # Run only fast tests (no Yarle install)
-pytest --ignore=tests/test_e2e.py
+uv run --extra dev pytest --ignore=tests/test_e2e.py
 
 # Regenerate fixture ENEX files
-python3 tests/build_fixtures.py
+uv run python tests/build_fixtures.py
 ```
 
 The full suite runs in ~2 seconds for unit/integration; ~7 seconds adding E2E (after first Yarle install).
