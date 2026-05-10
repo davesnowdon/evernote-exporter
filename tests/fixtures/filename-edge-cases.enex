@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE en-export SYSTEM "http://xml.evernote.com/pub/evernote-export4.dtd">
+<en-export export-date="20260506T143022Z" application="Evernote" version="10.0">
+<note>
+  <title>Has/Slash In Title</title>
+  <content><![CDATA[<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note><div>slash</div></en-note>]]></content>
+  <created>20180405T102300Z</created>
+  <updated>20241130T191200Z</updated>
+</note>
+<note>
+  <title>Has: Colon</title>
+  <content><![CDATA[<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note><div>colon</div></en-note>]]></content>
+  <created>20180405T102300Z</created>
+  <updated>20241130T191200Z</updated>
+</note>
+<note>
+  <title>Café Accented</title>
+  <content><![CDATA[<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note><div>accented</div></en-note>]]></content>
+  <created>20180405T102300Z</created>
+  <updated>20241130T191200Z</updated>
+</note>
+<note>
+  <title>Duplicate Title</title>
+  <content><![CDATA[<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note><div>first</div></en-note>]]></content>
+  <created>20180405T102300Z</created>
+  <updated>20241130T191200Z</updated>
+</note>
+<note>
+  <title>Duplicate Title</title>
+  <content><![CDATA[<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note><div>second</div></en-note>]]></content>
+  <created>20180405T102300Z</created>
+  <updated>20241130T191200Z</updated>
+</note>
+<note>
+  <title></title>
+  <content><![CDATA[<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note><div>empty title</div></en-note>]]></content>
+  <created>20180405T102300Z</created>
+  <updated>20241130T191200Z</updated>
+</note>
+</en-export>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE en-export SYSTEM "http://xml.evernote.com/pub/evernote-export4.dtd">
+<en-export export-date="20260506T143022Z" application="Evernote" version="10.0">
+<note>
+  <title>Note With Attachment</title>
+  <content><![CDATA[<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note><div>Inline image follows.</div><div><en-media type="image/png" hash="d7bbf0fed3bb19f9a01707d6271d56fb"/></div></en-note>]]></content>
+  <created>20180405T102300Z</created>
+  <updated>20241130T191200Z</updated>
+<resource>
+  <data encoding="base64">iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGMAAAACAAEAAAAFAAAAAElFTkSuQmCC</data>
+  <mime>image/png</mime>
+  <width>1</width>
+  <height>1</height>
+  <resource-attributes>
+    <file-name>photo.png</file-name>
+  </resource-attributes>
+</resource>
+</note>
+</en-export>
