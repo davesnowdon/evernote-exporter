@@ -11,6 +11,7 @@ from pathlib import Path
 
 from .enex_parser import count_enex, count_enex_dir, discover_stacks
 from .safety import MARKER_FILENAME
+from .yarle_config import yarle_filename_for
 
 # Files inside the output dir that are NOT note files
 _REPORT_AND_MARKER_FILES = {
@@ -82,9 +83,13 @@ class ReportData:
         if self.invocation_failures:
             return 2
         t = self.totals
+        # Notes / notebooks / frontmatter must match exactly.
+        # Attachments may exceed input count: Yarle extracts inline data-URL
+        # images (e.g. SVGs in web-clipped HTML) which aren't <resource>
+        # elements in the ENEX. Only flag *fewer* attachments out as a loss.
         if (
             t.notes_in != t.notes_out
-            or t.attachments_in != t.attachments_out
+            or t.attachments_out < t.attachments_in
             or t.notebooks_in != t.notebooks_out
             or t.frontmatter_valid != t.notes_out
         ):
@@ -189,7 +194,10 @@ def build_report(
         notebooks: list[NotebookReport] = []
         for enex_file in group.enex_files:
             counts_in = count_enex(enex_file)
-            notebook_name = enex_file.stem
+            # ENEX stem may contain spaces / forbidden chars that Yarle
+            # rewrites in its output folder. Mirror that sanitization to
+            # locate the actual output directory.
+            notebook_name = yarle_filename_for(enex_file.stem)
             notebook_out_dir = stack_output / notebook_name
             counts_out = count_output(notebook_out_dir)
 
@@ -257,9 +265,14 @@ def format_text_report(data: ReportData) -> str:
         f"Notes:         {t.notes_in} in / {t.notes_out} out "
         f"({'OK' if t.notes_in == t.notes_out else 'MISMATCH'})"
     )
+    if t.attachments_out < t.attachments_in:
+        att_status = "MISMATCH (data loss)"
+    elif t.attachments_out > t.attachments_in:
+        att_status = "OK (extras: inline data-URL extracts)"
+    else:
+        att_status = "OK"
     lines.append(
-        f"Attachments:   {t.attachments_in} in / {t.attachments_out} out "
-        f"({'OK' if t.attachments_in == t.attachments_out else 'MISMATCH'})"
+        f"Attachments:   {t.attachments_in} in / {t.attachments_out} out ({att_status})"
     )
     lines.append(
         f"Frontmatter:   {t.frontmatter_valid}/{t.notes_out} valid "

@@ -8,6 +8,7 @@ from evernote_exporter.yarle_config import (
     NOTE_TEMPLATE,
     build_yarle_config,
     write_template,
+    yarle_filename_for,
 )
 
 
@@ -157,6 +158,44 @@ def test_note_template_uses_array_tags_for_obsidian() -> None:
     assert "{tags-array}" in NOTE_TEMPLATE
     # The plain {tags} form would emit space-separated #tags inline — not what we want.
     # We allow it to be absent. Just ensure tags-array is the chosen form.
+
+
+def test_yarle_filename_for_replaces_spaces_with_hyphens() -> None:
+    assert yarle_filename_for("bash commands") == "bash-commands"
+    assert yarle_filename_for("Music practice log") == "Music-practice-log"
+
+
+def test_yarle_filename_for_preserves_apostrophes_and_accents() -> None:
+    assert yarle_filename_for("St Mary's") == "St-Mary's"
+    assert yarle_filename_for("SAM Coupé") == "SAM-Coupé"
+
+
+def test_yarle_filename_for_handles_consecutive_spaces_and_dashes() -> None:
+    # User-observed: "Projects - face manager" → "Projects---face-manager"
+    assert yarle_filename_for("Projects - face manager") == "Projects---face-manager"
+
+
+def test_yarle_filename_for_replaces_forbidden_chars_with_hyphen() -> None:
+    assert yarle_filename_for("a/b") == "a-b"
+    assert yarle_filename_for("a:b") == "a-b"
+    assert yarle_filename_for('a"b') == "a-b"
+
+
+def test_yarle_filename_for_strips_yarle_extra_chars() -> None:
+    # `[`, `]`, `#`, `^` are stripped (not replaced) AFTER spaces are
+    # converted to hyphens. So `note #1` → `note-#1` → `note-1`.
+    assert yarle_filename_for("[draft] note") == "draft-note"
+    assert yarle_filename_for("note #1") == "note-1"
+
+
+def test_yarle_filename_for_strips_leading_dots() -> None:
+    assert yarle_filename_for(".hidden") == "hidden"
+    assert yarle_filename_for("...weird") == "weird"
+
+
+def test_yarle_filename_for_passes_through_simple_names() -> None:
+    assert yarle_filename_for("android") == "android"
+    assert yarle_filename_for("Family") == "Family"
 
 
 def test_write_template_writes_file_with_template_contents(tmp_path: Path) -> None:

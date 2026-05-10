@@ -295,3 +295,51 @@ def test_report_exit_code_is_three_when_counts_mismatch() -> None:
         invocation_failures=[],
     )
     assert data.exit_code() == 3
+
+
+def test_report_exit_code_is_zero_when_more_attachments_out_than_in() -> None:
+    # Yarle extracts inline data-URL images (e.g. SVGs in web clips) that
+    # aren't <resource> elements in the ENEX. More-out is fine.
+    data = ReportData(
+        source_dir="x",
+        output_dir="y",
+        run_started="t",
+        run_finished="t",
+        yarle_version="v",
+        stacks=[],
+        totals=OutputCounts(
+            notebooks_in=1,
+            notebooks_out=1,
+            notes_in=10,
+            notes_out=10,
+            attachments_in=5,
+            attachments_out=12,  # 7 extras from inline data-URLs
+            frontmatter_valid=10,
+        ),
+        anomalies=[],
+        invocation_failures=[],
+    )
+    assert data.exit_code() == 0
+
+
+def test_report_exit_code_is_three_when_attachments_lost() -> None:
+    data = ReportData(
+        source_dir="x",
+        output_dir="y",
+        run_started="t",
+        run_finished="t",
+        yarle_version="v",
+        stacks=[],
+        totals=OutputCounts(
+            notebooks_in=1,
+            notebooks_out=1,
+            notes_in=10,
+            notes_out=10,
+            attachments_in=5,
+            attachments_out=4,  # one missing
+            frontmatter_valid=10,
+        ),
+        anomalies=[],
+        invocation_failures=[],
+    )
+    assert data.exit_code() == 3

@@ -6,8 +6,39 @@ constant.
 """
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from typing import Any
+
+# Filename-character mapping applied to titles (and notebook names derived
+# from ENEX file stems) BEFORE sanitize-filename runs. Mirrors what Yarle
+# does with `replacementCharacterMap` plus its baseline rules — kept here
+# so the reporter can predict where Yarle wrote each notebook folder.
+_REPLACEMENT_CHAR = "-"
+_REPLACEMENT_MAP = {" ": "-"}
+# sanitize-filename's forbidden chars (Linux + cross-platform) — replaced with
+# `_REPLACEMENT_CHAR`.
+_FORBIDDEN_CHARS_RE = re.compile(r'[\\/:*?"<>|\x00-\x1f]')
+# Yarle's additional strips after sanitize-filename.
+_EXTRA_STRIP_RE = re.compile(r"[\[\]#^]")
+
+
+def yarle_filename_for(name: str) -> str:
+    """Return the on-disk filename Yarle would produce for `name`.
+
+    Mirrors `normalizeFilenameString` in Yarle:
+        1. apply replacementCharacterMap
+        2. sanitize-filename with `replacement: replacementChar`
+        3. strip [, ], #, ^
+        4. strip leading dots
+    """
+    out = name
+    for src, dst in _REPLACEMENT_MAP.items():
+        out = out.replace(src, dst)
+    out = _FORBIDDEN_CHARS_RE.sub(_REPLACEMENT_CHAR, out)
+    out = _EXTRA_STRIP_RE.sub("", out)
+    out = re.sub(r"^\.+", "", out)
+    return out
 
 # Yarle template syntax (see Templates.md). Two block-handling functions
 # behave differently:
